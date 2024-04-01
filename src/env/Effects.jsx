@@ -21,7 +21,7 @@ export default function Effects() {
           aoSamples={5}
           aoRadius={0.4}
           distanceFalloff={0.75}
-          intensity={1}
+          intensity={2}
         /> */}
         <Outline
           visibleEdgeColor="white"

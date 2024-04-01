@@ -12,7 +12,7 @@ export default function Lighters() {
         ref={directLight}
         intensity={10}
         color={"#FFFFED"}
-        castShadow
+        // castShadow
         shadow-bias={-0.0004}
         position={[-20, 20, 20]}
         shadow-camera-top={20}
@@ -20,8 +20,12 @@ export default function Lighters() {
         shadow-camera-bottom={-20}
         shadow-camera-left={-20}
       />
-      <ambientLight intensity={0.2} />
-      <hemisphereLight />
+      <ambientLight intensity={0.2}
+        // castShadow
+      />
+      <hemisphereLight 
+        // castShadow
+      />
     </>
   );
 }

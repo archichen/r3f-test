@@ -104,6 +104,7 @@ function App() {
             // far: 20
           }
         }
+        // shadows
       >
         <Sky />
         <Perf position="top-left" />
@@ -111,7 +112,7 @@ function App() {
 
         <Suspense fallback={null}>
           <Bvh firstHitOnly>
-            <Physics timeStep={"vary"} debug>
+            <Physics timeStep={"vary"}>
               <KeyboardControls map={keyboardMap}>
                 <Ecctrl
                   ref={player}
