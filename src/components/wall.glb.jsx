@@ -5,14 +5,19 @@ Command: npx gltfjsx@6.2.16 wall.glb --root ../ -o ../../src/components/wall.glb
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
+import * as THREE from 'three';
 
 export function Model(props) {
   const { nodes, materials } = useGLTF('/assets/wall.glb')
+  const groundMaterial = materials.室内地毯;
+  groundMaterial.map.colorSpace = THREE.LinearSRGBColorSpace
+  console.log(groundMaterial.map.colorSpace)
+
   return (
     <group {...props} dispose={null}>
       <mesh geometry={nodes.立方体134.geometry} material={materials.材质} />
       <mesh geometry={nodes.立方体134_1.geometry} material={materials.黑色石质地面} />
-      <mesh geometry={nodes.立方体134_2.geometry} material={materials.室内地毯} />
+      <mesh geometry={nodes.立方体134_2.geometry} material={groundMaterial} />
       <mesh geometry={nodes.立方体134_3.geometry} material={materials.电梯条纹} />
       <mesh geometry={nodes.立方体134_4.geometry} material={materials['磨砂玻璃门-中间不透']} />
     </group>

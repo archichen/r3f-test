@@ -15,9 +15,7 @@ export default function SeatWapper({ seats }) {
             enabled={selectedIndex === index}
             onPointerOver={() => setSelectedIndex(index)}
             onPointerOut={() => setSelectedIndex(-1)}
-            onClick={() => {
-                setIsPopAlert(true);
-            }}
+            onClick={() => setSelectedIndex(index)}
           >
             {child}
           </Select>

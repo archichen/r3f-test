@@ -27,11 +27,12 @@ import {
   ToneMapping,
 } from "@react-three/postprocessing";
 import { Physics, RigidBody } from "@react-three/rapier";
-import Ecctrl, { EcctrlAnimation } from "ecctrl";
+import Ecctrl, { EcctrlAnimation, EcctrlJoystick } from "ecctrl";
 import SeatWapper from "./components/SeatWapper";
 import { DirectionalLightHelper } from "three";
 import Lighters from "./env/Lighters";
 import Effects from "./env/Effects";
+import { isMobile } from 'react-device-detect'
 
 function App() {
   const keyboardMap = [
@@ -96,6 +97,11 @@ function App() {
       >
         Reset
       </button>
+
+      {
+        isMobile && <EcctrlJoystick />
+      }
+
       <Canvas
         style={{ height: "100vh", width: "100vw" }}
         camera={
@@ -109,6 +115,7 @@ function App() {
         <Sky />
         <Perf position="top-left" />
         <Lighters />
+
 
         <Suspense fallback={null}>
           <Bvh firstHitOnly>
