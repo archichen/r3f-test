@@ -28,7 +28,7 @@ export default function Effects() {
           hiddenEdgeColor="white"
           blur
         //   width={0}
-          edgeStrength={10}
+          edgeStrength={20}
         />
         {/* <TiltShift2 samples={5} blur={0.1} /> */}
         <ToneMapping />

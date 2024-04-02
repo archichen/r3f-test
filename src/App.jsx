@@ -13,8 +13,9 @@ import {
 } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import { Model as Wall } from "./components/wall.glb";
-import { Model as Seats } from "./components/seats.glb";
+// import { Model as Seats } from "./components/seats.glb";
 // import { Model as Seats } from "./components/seats-conbined.glb";
+import { Model as Seats } from "./components/Seats";
 import { Model as Misc } from "./components/misc.glb";
 import { Model as CharacterModel } from "./components/Demon.glb";
 import { Suspense, useEffect, useRef } from "react";
@@ -73,7 +74,7 @@ function App() {
   const player = useRef();
 
   const reset = () => {
-    player.current.setTranslation({ x: 0, y: 10, z: 0 });
+    player.current.setTranslation({ x: 15, y: 10, z: 0 });
     player.current.setLinvel({ x: 0, y: 0, z: 0 });
     player.current.setAngvel({ x: 0, y: 0, z: 0 });
   };
@@ -119,13 +120,13 @@ function App() {
 
         <Suspense fallback={null}>
           <Bvh firstHitOnly>
-            <Physics timeStep={"vary"}>
-              <KeyboardControls map={keyboardMap}>
+            <Physics timeStep={"vary"} debug>
+              {/* <KeyboardControls map={keyboardMap}>
                 <Ecctrl
                   ref={player}
                   debug
                   animated
-                  position={[0.5, 20, 0]}
+                  position={[15, 20, 0]}
                   capsuleRadius={0.5}
                   capsuleHalfHeight={0.3}
                   // type="fixed"
@@ -137,7 +138,7 @@ function App() {
                     <CharacterModel scale={0.4} position={[0, -0.6, 0]} />
                   </EcctrlAnimation>
                 </Ecctrl>
-              </KeyboardControls>
+              </KeyboardControls> */}
 
               <RigidBody
                 type="fixed"
@@ -149,21 +150,22 @@ function App() {
                 <Wall />
               </RigidBody>
 
-              <RigidBody type="fixed" ccd scale={5}>
+              {/* <RigidBody type="fixed" ccd scale={5}> */}
                 <Selection>
                   <Effects />
-                  <SeatWapper seats={Seats} />
+                  <Seats />
+                  {/* <SeatWapper seats={Seats} /> */}
                 </Selection>
-              </RigidBody>
+              {/* </RigidBody> */}
 
-              <RigidBody type="fixed" ccd scale={5}>
+              {/* <RigidBody type="fixed" ccd scale={5}>
                 <Misc />
-              </RigidBody>
+              </RigidBody> */}
             </Physics>
           </Bvh>
         </Suspense>
         {/* <PointerLockControls /> */}
-        {/* <OrbitControls /> */}
+        <OrbitControls />
       </Canvas>
     </div>
   );

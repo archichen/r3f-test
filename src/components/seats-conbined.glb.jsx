@@ -10,19 +10,19 @@ export function Model(props) {
   const { nodes, materials } = useGLTF('/assets/seats-conbined.glb')
   return (
     <group {...props} dispose={null}>
-      <group position={[-3.278, -0.343, 4.897]} rotation={[Math.PI, -Math.PI / 2, 0]} scale={[-0.029, -0.034, -0.025]}>
-        <mesh geometry={nodes.平面008.geometry} material={materials['Material #72.002']} />
-        <mesh geometry={nodes.平面008_1.geometry} material={materials['材质.013']} />
-        <mesh geometry={nodes.平面008_2.geometry} material={materials['材质.003']} />
-        <mesh geometry={nodes.平面008_3.geometry} material={materials['keyboard_material.002']} />
-        <mesh geometry={nodes.平面008_4.geometry} material={materials['Keyboard_emit.002']} />
-        <mesh geometry={nodes.平面008_5.geometry} material={materials['柜子-红.001']} />
-        <mesh geometry={nodes.平面008_6.geometry} material={materials['Material #2142156146.001']} />
-        <mesh geometry={nodes.平面008_7.geometry} material={materials['显示器金属臂.001']} />
-        <mesh geometry={nodes.平面008_8.geometry} material={materials['logo墙.003']} />
-        <mesh geometry={nodes.平面008_9.geometry} material={materials['材质.008']} />
-        <mesh geometry={nodes.平面008_10.geometry} material={materials['材质.009']} />
-        <mesh geometry={nodes.平面008_11.geometry} material={materials['材质.012']} />
+      <group position={[-2.714, -0.343, 5.308]} rotation={[0, -Math.PI / 2, 0]} scale={[0.029, 0.034, 0.025]}>
+        <mesh geometry={nodes.平面002.geometry} material={materials['Material #72.002']} />
+        <mesh geometry={nodes.平面002_1.geometry} material={materials['材质.013']} />
+        <mesh geometry={nodes.平面002_2.geometry} material={materials['材质.003']} />
+        <mesh geometry={nodes.平面002_3.geometry} material={materials['keyboard_material.002']} />
+        <mesh geometry={nodes.平面002_4.geometry} material={materials['Keyboard_emit.002']} />
+        <mesh geometry={nodes.平面002_5.geometry} material={materials['柜子-红.001']} />
+        <mesh geometry={nodes.平面002_6.geometry} material={materials['Material #2142156146.001']} />
+        <mesh geometry={nodes.平面002_7.geometry} material={materials['显示器金属臂.001']} />
+        <mesh geometry={nodes.平面002_8.geometry} material={materials['logo墙.003']} />
+        <mesh geometry={nodes.平面002_9.geometry} material={materials['材质.008']} />
+        <mesh geometry={nodes.平面002_10.geometry} material={materials['材质.009']} />
+        <mesh geometry={nodes.平面002_11.geometry} material={materials['材质.012']} />
       </group>
     </group>
   )
