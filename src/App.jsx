@@ -33,7 +33,7 @@ import SeatWapper from "./components/SeatWapper";
 import { DirectionalLightHelper } from "three";
 import Lighters from "./env/Lighters";
 import Effects from "./env/Effects";
-import { isMobile } from 'react-device-detect'
+import { isMobile } from "react-device-detect";
 
 function App() {
   const keyboardMap = [
@@ -99,9 +99,7 @@ function App() {
         Reset
       </button>
 
-      {
-        isMobile && <EcctrlJoystick />
-      }
+      {isMobile && <EcctrlJoystick />}
 
       <Canvas
         style={{ height: "100vh", width: "100vw" }}
@@ -111,17 +109,17 @@ function App() {
             // far: 20
           }
         }
-        // shadows
+        shadows
       >
         <Sky />
         <Perf position="top-left" />
         <Lighters />
-
+        <Effects />
 
         <Suspense fallback={null}>
           <Bvh firstHitOnly>
-            <Physics timeStep={"vary"} debug>
-              {/* <KeyboardControls map={keyboardMap}>
+            <Physics timeStep={"vary"}>
+              <KeyboardControls map={keyboardMap}>
                 <Ecctrl
                   ref={player}
                   debug
@@ -138,7 +136,7 @@ function App() {
                     <CharacterModel scale={0.4} position={[0, -0.6, 0]} />
                   </EcctrlAnimation>
                 </Ecctrl>
-              </KeyboardControls> */}
+              </KeyboardControls>
 
               <RigidBody
                 type="fixed"
@@ -150,13 +148,7 @@ function App() {
                 <Wall />
               </RigidBody>
 
-              {/* <RigidBody type="fixed" ccd scale={5}> */}
-                <Selection>
-                  <Effects />
-                  <Seats />
-                  {/* <SeatWapper seats={Seats} /> */}
-                </Selection>
-              {/* </RigidBody> */}
+              <Seats />
 
               {/* <RigidBody type="fixed" ccd scale={5}>
                 <Misc />
@@ -165,7 +157,7 @@ function App() {
           </Bvh>
         </Suspense>
         {/* <PointerLockControls /> */}
-        <OrbitControls />
+        {/* <OrbitControls /> */}
       </Canvas>
     </div>
   );

@@ -1,7 +1,16 @@
-import React, { useMemo, useRef, useState } from "react";
-import { Box, Instance, Instances, Merged, useGLTF } from "@react-three/drei";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Box,
+  Edges,
+  Instance,
+  Instances,
+  Merged,
+  useGLTF,
+} from "@react-three/drei";
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import { Select } from "@react-three/postprocessing";
+import { useFrame } from "@react-three/fiber";
+import { Vector3 } from "three";
 
 export function Model(props) {
   const { nodes } = useGLTF("/assets/seats.glb");
@@ -46,6 +55,21 @@ export function Model(props) {
     [nodes]
   );
 
+  useEffect(() => {
+    document.focusSeat = null;
+  });
+
+  const handlePointerOverSeat = (seat) => {
+    document.focusSeat = seat;
+    document.isFocusOnSeat = true;
+    console.log(document.focusSeat)
+  };
+
+  const handlePointerLeaveSeat = () => {
+    document.focusSeat = null;
+    document.isFocusOnSeat = false;
+  };
+
   return (
     <>
       <Merged meshes={meshs}>
@@ -53,7 +77,6 @@ export function Model(props) {
           return (
             <group position={[0, 0, 0]} scale={5}>
               {seats.map((seat, index) => {
-                // console.log(seat.position);
                 return (
                   <RigidBody key={index} type="fixed">
                     <group
@@ -62,6 +85,8 @@ export function Model(props) {
                       scale={seat.scale}
                       quaternion={seat.quaternion}
                       rotation={seat.rotation}
+                      onPointerOver={() => handlePointerOverSeat(seat)}
+                      onPointerLeave={() => handlePointerLeaveSeat()}
                     >
                       <models.M1 />
                       <models.M2 />
@@ -76,7 +101,7 @@ export function Model(props) {
                       <models.M11 />
                       <models.M12 />
                     </group>
-                    {console.log('Merged re-render')}
+                    {console.log("Merged re-render")}
                     <CuboidCollider
                       args={[1, 1, 1]}
                       position={seat.position}
@@ -85,34 +110,33 @@ export function Model(props) {
                   </RigidBody>
                 );
               })}
+              <HightLightBox />
             </group>
           );
         }}
       </Merged>
-      {/* TODO: 优化渲染效率问题 */}
-      <Select
-        enabled={selectedIndex === 1}
-        onPointerOver={() => setSelectedIndex(1)}
-        onPointerLeave={() => setSelectedIndex(-1)}
-      >
-        <Box position={seats[0].position} scale={5} />
-      </Select>
     </>
   );
 }
 
-// function SelectableBox(props) {
-//   const [selectedIndex, setSelectedIndex] = useState(-1);
+function HightLightBox(props) {
+  const highLightBox = useRef();
 
-//   return (
-//     <group {...props}>
-//       <Select
-//         enabled={selectedIndex === props.index}
+  useFrame(() => {
+    if (document.isFocusOnSeat) {
+      highLightBox.current.visible = true;
+      highLightBox.current.position.copy(document.focusSeat.position);
+    } else {
+      highLightBox.current.visible = false;
+    }
+  });
+  return (
+    <mesh ref={highLightBox} scale={0.4}>
+      <boxGeometry />
+      <meshStandardMaterial transparent={true} opacity={0} />
+      <Edges scale={1} renderOrder={1000} lineWidth={2} color={"orange"} />
+    </mesh>
+  );
+}
 
-//       >
-//         <Box />
-//       </Select>
-//     </group>
-//   );
-// }
 useGLTF.preload("/assets/seats.glb");
