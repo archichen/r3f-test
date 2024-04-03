@@ -5,6 +5,7 @@ import {
   GizmoHelper,
   KeyboardControls,
   OrbitControls,
+  Plane,
   PointerLockControls,
   ScrollControls,
   Sky,
@@ -110,6 +111,12 @@ function App() {
           }
         }
         shadows
+        flat={true}
+        dpr={[1, 2]}
+        gl={{
+          antialias: false,
+          // toneMapping: ToneMapping.Linear,
+        }}
       >
         <Sky />
         <Perf position="top-left" />
@@ -127,13 +134,14 @@ function App() {
                   position={[15, 20, 0]}
                   capsuleRadius={0.5}
                   capsuleHalfHeight={0.3}
+                  castShadow={true} receiveShadow={true}
                   // type="fixed"
                 >
                   <EcctrlAnimation
                     characterURL={characterURL}
                     animationSet={animationSet}
                   >
-                    <CharacterModel scale={0.4} position={[0, -0.6, 0]} />
+                    <CharacterModel castShadow={true} receiveShadow={true}  scale={0.4} position={[0, -0.6, 0]} />
                   </EcctrlAnimation>
                 </Ecctrl>
               </KeyboardControls>
@@ -149,6 +157,7 @@ function App() {
               </RigidBody>
 
               <Seats />
+              
 
               {/* <RigidBody type="fixed" ccd scale={5}>
                 <Misc />
@@ -156,7 +165,7 @@ function App() {
             </Physics>
           </Bvh>
         </Suspense>
-        {/* <PointerLockControls /> */}
+        <PointerLockControls />
         {/* <OrbitControls /> */}
       </Canvas>
     </div>

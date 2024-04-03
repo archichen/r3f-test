@@ -16,6 +16,7 @@ export function Model(props) {
   const { nodes } = useGLTF("/assets/seats.glb");
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
+  // TODO: 加入高模支持
   const meshs = useMemo(
     () => ({
       M1: nodes.平面002,
@@ -62,7 +63,7 @@ export function Model(props) {
   const handlePointerOverSeat = (seat) => {
     document.focusSeat = seat;
     document.isFocusOnSeat = true;
-    console.log(document.focusSeat)
+    // console.log(document.focusSeat);
   };
 
   const handlePointerLeaveSeat = () => {
@@ -72,7 +73,7 @@ export function Model(props) {
 
   return (
     <>
-      <Merged meshes={meshs}>
+      <Merged meshes={meshs} castShadow={true} receiveShadow={true}>
         {(models) => {
           return (
             <group position={[0, 0, 0]} scale={5}>
@@ -101,7 +102,7 @@ export function Model(props) {
                       <models.M11 />
                       <models.M12 />
                     </group>
-                    {console.log("Merged re-render")}
+                    {console.log('heavy component re-render')}
                     <CuboidCollider
                       args={[1, 1, 1]}
                       position={seat.position}

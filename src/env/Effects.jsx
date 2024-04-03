@@ -1,4 +1,12 @@
-import { Sky } from "@react-three/drei";
+import {
+  AccumulativeShadows,
+  Environment,
+  Float,
+  Lightformer,
+  RandomizedLight,
+  Sky,
+} from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import {
   Bloom,
   DepthOfField,
@@ -10,10 +18,9 @@ import {
   ToneMapping,
   Vignette,
 } from "@react-three/postprocessing";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 
 export default function Effects() {
-  console.log(document.focusSeat)
   return (
     <>
       <EffectComposer
@@ -22,23 +29,30 @@ export default function Effects() {
         autoClear={false}
         multisampling={4}
       >
-        {/* <N8AO
+        <N8AO
           halfRes
-          aoSamples={100}
-          aoRadius={0.4}
-          distanceFalloff={0.75}
+          aoSamples={10}
+          aoRadius={.5}
+          distanceFalloff={.75}
           intensity={2}
-        /> */}
+        />
         {/* <TiltShift2 samples={5} blur={0.1} /> */}
-        {/* <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} /> */}
-        {/* <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} /> */}
-        {/* <Noise opacity={0.02} /> */}
-        {/* <Vignette eskil={false} offset={0.1} darkness={1.1} /> */}
-        {/* <Outline 
-          selection={[document.focusSeat ? <mesh></mesh>: document.focusSeat]}
-        /> */}
         <ToneMapping />
       </EffectComposer>
+
+      <AccumulativeShadows
+        position={[0, -1.16, 0]}
+        frames={100}
+        alphaTest={0.9}
+        scale={10}
+      >
+        <RandomizedLight
+          amount={8}
+          radius={10}
+          ambient={0.5}
+          position={[1, 5, -1]}
+        />
+      </AccumulativeShadows>
     </>
   );
 }
