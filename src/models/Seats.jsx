@@ -71,6 +71,8 @@ export function Model(props) {
     document.isFocusOnSeat = false;
   };
 
+  console.log('%cSEATS - heavy component re-render! \nOptimize your code!!!', 'color: red; font-size: 16px;')
+
   return (
     <>
       <Merged meshes={meshs} castShadow={true} receiveShadow={true}>
@@ -102,7 +104,7 @@ export function Model(props) {
                       <models.M11 />
                       <models.M12 />
                     </group>
-                    {console.log('heavy component re-render')}
+                    
                     <CuboidCollider
                       args={[1, 1, 1]}
                       position={seat.position}
