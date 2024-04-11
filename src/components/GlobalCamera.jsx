@@ -1,213 +1,134 @@
-import { CameraControls, Html } from "@react-three/drei";
-import { ORBIT_CAMERA, useCameraStore } from "../store/cameraStore";
+import {
+    CameraControls,
+    Html,
+    OrbitControls,
+    PointerLockControls,
+} from "@react-three/drei";
+import {
+    ORBIT_CAMERA,
+    PLAYER_CAMERA,
+    useCameraStore,
+} from "../store/cameraStore";
 import { useEffect, useRef, useState } from "react";
 import { useControls, button, buttonGroup, folder } from "leva";
-import { useThree } from "@react-three/fiber";
-import * as THREE from 'three'
+import { useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+import { isEmpty } from "lodash";
 
-const overLookCameraConfig = {
-    pos: [0, 10, 10],
-    target: [0, 0, 0],
+let isPointerLock = false;
+const cameraStat = {
+    from: new THREE.Vector3(),
+    to: new THREE.Vector3(),
+    isAnimationDone: true,
 };
 
 export default function GlobalCamera() {
-    const cameraControlsRef = useRef();
-
     const currentCamera = useCameraStore((state) => state.currentCamera);
-    // useEffect(() => {
-    //     if (currentCamera === ORBIT_CAMERA) {
-    //         ref.current.setPosition(overLookCameraConfig.pos)
-    //     }
-    // });
-    // useEffect(() => {
-    //     const { playerState } = document;
-    //     if (playerState) {
-    //         const { pos } = playerState;
-    //         if (pos && currentCamera === ORBIT_CAMERA) {
-    //             ref.current.lerpLookAt(
-    //                 [pos.x, pos.y, pos.z],
-    //                 [pos.x, pos.y, pos.z],
-    //                 overLookCameraConfig.pos,
-    //                 overLookCameraConfig.target
-    //             );
-    //         }
-    //     }
-    // }, [currentCamera]);
+    const { playerPosition, overLookPosition } = useCameraStore((state) => ({
+        playerPosition: state.playerPosition,
+        overLookPosition: state.overLookPosition,
+    }));
 
-    const { camera } = useThree()
+    const pointerLockCamRef = useRef();
 
-    const { DEG2RAD } = THREE.MathUtils
+    // 相机切换：位置管理
+    useEffect(() => {
+        if (currentCamera === ORBIT_CAMERA) {
+            cameraStat.from = new THREE.Vector3(
+                playerPosition[0],
+                playerPosition[1],
+                playerPosition[2]
+            );
+            cameraStat.to = new THREE.Vector3(
+                overLookPosition[0],
+                overLookPosition[1],
+                overLookPosition[2]
+            );
+            isPointerLock = false;
+        }
+        if (currentCamera === PLAYER_CAMERA) {
+            cameraStat.from = new THREE.Vector3(
+                overLookPosition[0],
+                overLookPosition[1],
+                overLookPosition[2]
+            );
+            cameraStat.to = new THREE.Vector3(
+                playerPosition[0],
+                playerPosition[1],
+                playerPosition[2]
+            );
+            isPointerLock = true;
+        }
+        cameraStat.isAnimationDone = false;
+    }, [currentCamera]);
 
-    const {
-        minDistance,
-        enabled,
-        verticalDragToForward,
-        dollyToCursor,
-        infinityDolly,
-    } = useControls({
-        thetaGrp: buttonGroup({
-            label: "rotate theta",
-            opts: {
-                "+45º": () =>
-                    cameraControlsRef.current?.rotate(45 * DEG2RAD, 0, true),
-                "-90º": () =>
-                    cameraControlsRef.current?.rotate(-90 * DEG2RAD, 0, true),
-                "+360º": () =>
-                    cameraControlsRef.current?.rotate(360 * DEG2RAD, 0, true),
-            },
-        }),
-        phiGrp: buttonGroup({
-            label: "rotate phi",
-            opts: {
-                "+20º": () =>
-                    cameraControlsRef.current?.rotate(0, 20 * DEG2RAD, true),
-                "-40º": () =>
-                    cameraControlsRef.current?.rotate(0, -40 * DEG2RAD, true),
-            },
-        }),
-        truckGrp: buttonGroup({
-            label: "truck",
-            opts: {
-                "(1,0)": () => cameraControlsRef.current?.truck(1, 0, true),
-                "(0,1)": () => cameraControlsRef.current?.truck(0, 1, true),
-                "(-1,-1)": () => cameraControlsRef.current?.truck(-1, -1, true),
-            },
-        }),
-        dollyGrp: buttonGroup({
-            label: "dolly",
-            opts: {
-                1: () => cameraControlsRef.current?.dolly(1, true),
-                "-1": () => cameraControlsRef.current?.dolly(-1, true),
-            },
-        }),
-        zoomGrp: buttonGroup({
-            label: "zoom",
-            opts: {
-                "/2": () =>
-                    cameraControlsRef.current?.zoom(camera.zoom / 2, true),
-                "/-2": () =>
-                    cameraControlsRef.current?.zoom(-camera.zoom / 2, true),
-            },
-        }),
-        minDistance: { value: 0 },
-        moveTo: folder(
-            {
-                vec1: { value: [3, 5, 2], label: "vec" },
-                "moveTo(…vec)": button((get) =>
-                    {
-                        console.log('moveTo.vec1: ', ...get("moveTo.vec1"))
-                        cameraControlsRef.current?.moveTo(
-                            ...get("moveTo.vec1"),
-                            true
-                        )
-                    }
-                ),
-            },
-            { collapsed: true }
-        ),
-        // "fitToBox(mesh)": button(() =>
-        //     cameraControlsRef.current?.fitToBox(meshRef.current, true)
-        // ),
-        setPosition: folder(
-            {
-                vec2: { value: [-5, 2, 1], label: "vec" },
-                "setPosition(…vec)": button((get) =>
-                    cameraControlsRef.current?.setPosition(
-                        ...get("setPosition.vec2"),
-                        true
-                    )
-                ),
-            },
-            { collapsed: true }
-        ),
-        setTarget: folder(
-            {
-                vec3: { value: [3, 0, -3], label: "vec" },
-                "setTarget(…vec)": button((get) =>
-                    cameraControlsRef.current?.setTarget(
-                        ...get("setTarget.vec3"),
-                        true
-                    )
-                ),
-            },
-            { collapsed: true }
-        ),
-        setLookAt: folder(
-            {
-                vec4: { value: [1, 2, 3], label: "position" },
-                vec5: { value: [1, 1, 0], label: "target" },
-                "setLookAt(…position, …target)": button((get) =>
-                    cameraControlsRef.current?.setLookAt(
-                        ...get("setLookAt.vec4"),
-                        ...get("setLookAt.vec5"),
-                        true
-                    )
-                ),
-            },
-            { collapsed: true }
-        ),
-        lerpLookAt: folder(
-            {
-                vec6: { value: [-2, 0, 0], label: "posA" },
-                vec7: { value: [1, 1, 0], label: "tgtA" },
-                vec8: { value: [0, 2, 5], label: "posB" },
-                vec9: { value: [-1, 0, 0], label: "tgtB" },
-                t: { value: Math.random(), label: "t", min: 0, max: 1 },
-                "f(…posA,…tgtA,…posB,…tgtB,t)": button((get) => {
-                    return cameraControlsRef.current?.lerpLookAt(
-                        ...get("lerpLookAt.vec6"),
-                        ...get("lerpLookAt.vec7"),
-                        ...get("lerpLookAt.vec8"),
-                        ...get("lerpLookAt.vec9"),
-                        get("lerpLookAt.t"),
-                        true
-                    );
-                }),
-            },
-            { collapsed: true }
-        ),
-        saveState: button(() => cameraControlsRef.current?.saveState()),
-        reset: button(() => cameraControlsRef.current?.reset(true)),
-        enabled: { value: true, label: "controls on" },
-        verticalDragToForward: {
-            value: false,
-            label: "vert. drag to move forward",
-        },
-        dollyToCursor: { value: false, label: "dolly to cursor" },
-        infinityDolly: { value: false, label: "infinity dolly" },
+    // 相机切换：动画实现
+    // BUG: 相机动画与 Ecctrl 相机管理冲突，导致切换到 PLAYER CAMERA 后视角无法正确归位
+    // 目前暂时当切换到 PLAYER CAMERA 时不播放动画
+    useFrame(({ camera }, delta) => {
+        const { to, isAnimationDone } = cameraStat;
+
+        if (isAnimationDone) return;
+        // camera.position.lerp(to, 0.1);
+        // camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+        // if (camera.position.distanceTo(to) < 0.1) {
+        //     cameraStat.isAnimationDone = true;
+        // }
+
+        if (currentCamera === ORBIT_CAMERA) {
+            camera.position.lerp(to, 2 * delta);
+            if (camera.position.distanceTo(to) < 0.1) {
+                cameraStat.isAnimationDone = true;
+
+                console.log("相机到位");
+                console.log(to);
+            }
+            camera.lookAt(new THREE.Vector3(0, 0, 0));
+        }
     });
 
-    const [test, setTest] = useState(false);
+    const { camera } = useThree();
 
-    // if (test) {
-    //     console.log("test clicked")
-    //     cameraControlsRef.current?.moveTo(
-    //         [3, 5, 2],
-    //         true
-    //     )
-    //     setTest(false)
-    // }
+    // 相机初始化，默认为 orbit 相机
+    useEffect(() => {
+        // TODO: 尝试使用更好的方法解决 pointer lock 不能动态 enable 的问题
+        // BUG: 貌似只要 PointerControl 组件挂载着，R3F 组件的 onPointerXX 事件就失效了
+        setInterval(() => {
+            if (
+                !isPointerLock &&
+                pointerLockCamRef &&
+                pointerLockCamRef?.current
+            ) {
+                pointerLockCamRef?.current.unlock();
+            }
+        }, 10);
 
-    const handleTest = () => {
-        cameraControlsRef.current?.moveTo(
-            3, 5, 2,
-            true
-        )
-    }
+        // if (currentCamera === ORBIT_CAMERA) {
+        //     camera.position.copy(
+        //         new THREE.Vector3(
+        //             overLookPosition[0],
+        //             overLookPosition[1],
+        //             overLookPosition[2]
+        //         )
+        //     );
+        //     camera.lookAt(new THREE.Vector3(0, 0, 0));
+        // }
+    });
 
     return (
         <>
-            <CameraControls
-                ref={cameraControlsRef}
-                minDistance={minDistance}
-                enabled={enabled}
-                verticalDragToForward={verticalDragToForward}
-                dollyToCursor={dollyToCursor}
-                infinityDolly={infinityDolly}
+            <OrbitControls
+                enabled={currentCamera === ORBIT_CAMERA}
+                makeDefault={currentCamera === ORBIT_CAMERA}
             />
-            <Html>
-                <button onClick={handleTest}>test</button>
-            </Html>
+            <PointerLockControls
+                ref={pointerLockCamRef}
+                // BUG: pointer lock 相机无法动态 enable，当从 disable -> enable 后，鼠标无法自动 lock，lock 后鼠标无法控制转向
+                // 动态挂载/解除挂载也不能解决问题
+                // enabled={currentCamera === PLAYER_CAMERA}
+                makeDefault={currentCamera === PLAYER_CAMERA}
+            />
         </>
     );
 }

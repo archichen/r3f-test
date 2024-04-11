@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import {
     Bvh,
+    Effects,
     Sky,
 } from "@react-three/drei";
 import { Perf } from "r3f-perf";
@@ -8,7 +9,6 @@ import { Model as Wall } from "./models/wall.glb";
 // import { Model as Seats } from "./components/seats.glb";
 // import { Model as Seats } from "./components/seats-conbined.glb";
 import { Model as Seats } from "./models/Seats";
-import { Model as Roof } from "./models/wall-roof.glb";
 import { Suspense } from "react";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { EcctrlJoystick } from "ecctrl";
@@ -17,10 +17,7 @@ import { isMobile } from "react-device-detect";
 import Interface from "./Interface";
 import Player from "./components/Player";
 import GlobalCamera from "./components/GlobalCamera";
-
-document.playerState = {
-    pos: {}
-}
+import Roof from "./models/Roof";
 
 function App() {
     return (

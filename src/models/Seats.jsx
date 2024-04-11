@@ -1,3 +1,5 @@
+// * 该组建不由 gltf2jsx 脚本生成
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Box,
@@ -16,7 +18,8 @@ export function Model(props) {
   const { nodes } = useGLTF("/assets/seats.glb");
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
-  // TODO: 加入高模支持
+  // TODO: 1. 加入高模支持
+  // TODO: 2. 加入 Detail 组件，根据相机距离自动切换高低模
   const meshs = useMemo(
     () => ({
       M1: nodes.平面002,

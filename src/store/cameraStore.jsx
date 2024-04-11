@@ -7,4 +7,7 @@ export const PLAYER_CAMERA = generateUUID();
 export const useCameraStore = create((set) => ({
     currentCamera: ORBIT_CAMERA,
     setCurrentCamera: (camera) => set({ currentCamera: camera }),
+    playerPosition: [],
+    setPlayerPosition: (position) => set({ playerPosition: position }),
+    overLookPosition: [20, 80, 50]
 }));

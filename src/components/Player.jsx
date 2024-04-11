@@ -2,9 +2,11 @@ import { KeyboardControls } from "@react-three/drei";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import { useEffect, useRef } from "react";
 import { Model as CharacterModel } from "../models/Demon.glb";
-import { ORBIT_CAMERA, useCameraStore } from "../store/cameraStore";
-
-const { playerState } = document;
+import {
+    ORBIT_CAMERA,
+    PLAYER_CAMERA,
+    useCameraStore,
+} from "../store/cameraStore";
 
 export default function Player() {
     const keyboardMap = [
@@ -51,22 +53,25 @@ export default function Player() {
     };
 
     const currentCamera = useCameraStore((state) => state.currentCamera);
+    const setPlayerPosition = useCameraStore(
+        (state) => state.setPlayerPosition
+    );
     useEffect(() => {
-        if (document.playerState && document.playerState.pos) {
-            //  当镜头切换成 Orbit camera 时，记下角色位置，用来相机位移动画回到角色的时候使用
-            if (currentCamera === ORBIT_CAMERA) {
-                document.playerState.pos = player.current.translation();
-            }
-        }
+        const { x, y, z } = player.current.translation();
+        setPlayerPosition([x, y, z]);
+        console.log([x, y, z]);
     }, [currentCamera]);
 
     return (
-        <KeyboardControls map={keyboardMap}>
+        <KeyboardControls
+            map={currentCamera === PLAYER_CAMERA ? keyboardMap : []}
+        >
+            {/* TODO: 调整Ecctrl 组件参数，解决 Player 漂浮问题 */}
             <Ecctrl
                 ref={player}
                 debug
                 animated
-                position={[15, 20, 0]}
+                position={[-6, 0, -5.5]}
                 capsuleRadius={0.5}
                 capsuleHalfHeight={0.3}
                 castShadow={true}
