@@ -29,6 +29,7 @@ export default function Lighters() {
   );
 }
 
+// 根据模型大小，生成一条边的灯光测试效果
 function RoomLights() {
   const vecs = useMemo(() => {
     const vecs = [];
