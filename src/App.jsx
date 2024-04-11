@@ -66,9 +66,10 @@ function App() {
 
                             <Seats />
 
+                            {/* TODO: 优化杂七杂八组件的碰撞和渲染，默认碰撞太吃性能 */}
                             {/* <RigidBody type="fixed" ccd scale={5}>
-                <Misc />
-              </RigidBody> */}
+                                    <Misc />
+                                </RigidBody> */}
                         </Physics>
                     </Bvh>
                 </Suspense>
