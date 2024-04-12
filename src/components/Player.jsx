@@ -67,11 +67,12 @@ export default function Player() {
             map={currentCamera === PLAYER_CAMERA ? keyboardMap : []}
         >
             {/* TODO: 调整Ecctrl 组件参数，解决 Player 漂浮问题 */}
+            {/* BUG: 在某些设备上，全屏状态切换时会导致 Player 碰撞异常然后掉下去 */}
             <Ecctrl
                 ref={player}
                 debug
                 animated
-                position={[-6, 0, -5.5]}
+                position={[-6, 10, -5.5]}
                 capsuleRadius={0.5}
                 capsuleHalfHeight={0.3}
                 castShadow={true}

@@ -57,9 +57,13 @@ export default function GlobalCamera() {
                 playerPosition[1],
                 playerPosition[2]
             );
-            isPointerLock = true;
+            if (!isEmpty(document.canvas)) {
+                document.canvas.requestPointerLock();
+            }
         }
         cameraStat.isAnimationDone = false;
+
+        document.camera = currentCamera;
     }, [currentCamera]);
 
     // 相机切换：动画实现
@@ -69,12 +73,6 @@ export default function GlobalCamera() {
         const { to, isAnimationDone } = cameraStat;
 
         if (isAnimationDone) return;
-        // camera.position.lerp(to, 0.1);
-        // camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-        // if (camera.position.distanceTo(to) < 0.1) {
-        //     cameraStat.isAnimationDone = true;
-        // }
 
         if (currentCamera === ORBIT_CAMERA) {
             camera.position.lerp(to, 2 * delta);
@@ -88,12 +86,8 @@ export default function GlobalCamera() {
         }
     });
 
-    const { camera } = useThree();
-
     // 相机初始化，默认为 orbit 相机
     useEffect(() => {
-        // TODO: 尝试使用更好的方法解决 pointer lock 不能动态 enable 的问题
-        // BUG: 貌似只要 PointerControl 组件挂载着，R3F 组件的 onPointerXX 事件就失效了
         setInterval(() => {
             if (
                 !isPointerLock &&
@@ -103,17 +97,6 @@ export default function GlobalCamera() {
                 pointerLockCamRef?.current.unlock();
             }
         }, 10);
-
-        // if (currentCamera === ORBIT_CAMERA) {
-        //     camera.position.copy(
-        //         new THREE.Vector3(
-        //             overLookPosition[0],
-        //             overLookPosition[1],
-        //             overLookPosition[2]
-        //         )
-        //     );
-        //     camera.lookAt(new THREE.Vector3(0, 0, 0));
-        // }
     });
 
     return (
@@ -121,13 +104,6 @@ export default function GlobalCamera() {
             <OrbitControls
                 enabled={currentCamera === ORBIT_CAMERA}
                 makeDefault={currentCamera === ORBIT_CAMERA}
-            />
-            <PointerLockControls
-                ref={pointerLockCamRef}
-                // BUG: pointer lock 相机无法动态 enable，当从 disable -> enable 后，鼠标无法自动 lock，lock 后鼠标无法控制转向
-                // 动态挂载/解除挂载也不能解决问题
-                // enabled={currentCamera === PLAYER_CAMERA}
-                makeDefault={currentCamera === PLAYER_CAMERA}
             />
         </>
     );

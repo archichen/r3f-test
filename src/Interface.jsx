@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useCameraStore, ORBIT_CAMERA, PLAYER_CAMERA } from "./store/cameraStore";
 
 export default function Interface() {
@@ -14,6 +15,17 @@ export default function Interface() {
         }
     };
 
+    const [isFullScreen, setIsFullScreen] = useState(false);
+    const handleSwitchFullScreen = () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            setIsFullScreen(false);
+        } else {
+            document.documentElement.requestFullscreen();
+            setIsFullScreen(true);
+        }
+    };
+
     return (
         <div
             style={{
@@ -21,9 +33,12 @@ export default function Interface() {
                 position: "absolute",
                 bottom: "10px",
                 left: "10px",
+                display: "flex",
+                gap: "10px",
             }}
         >
             <button onClick={handleSwitchView}>Switch view</button>
+            <button onClick={handleSwitchFullScreen}>{ isFullScreen ? "Exit full screen" : "Enter full screen" }</button>
         </div>
     );
 }
