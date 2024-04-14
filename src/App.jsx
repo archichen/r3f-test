@@ -8,16 +8,17 @@ import { Perf } from "r3f-perf";
 import { Model as Wall } from "./models/wall.glb";
 // import { Model as Seats } from "./components/seats.glb";
 // import { Model as Seats } from "./components/seats-conbined.glb";
-import { Model as Misc } from "./models/misc.glb";
+// import { Model as Misc } from "./models/misc.glb";
 import { Model as Seats } from "./models/Seats";
+import Misc from "./models/Misc";
 import { Suspense, useEffect, useRef } from "react";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { EcctrlJoystick } from "ecctrl";
 import Lighters from "./env/Lighters";
 import { isMobile } from "react-device-detect";
 import Interface from "./Interface";
-import Player from "./components/Player";
-import GlobalCamera from "./components/GlobalCamera";
+import Player from "./components/default/Player";
+import GlobalCamera from "./components/default/GlobalCamera";
 import Roof from "./models/Roof";
 import { PLAYER_CAMERA } from "./store/cameraStore";
 import { isEmpty } from "lodash";
@@ -43,6 +44,7 @@ function App() {
             await document.canvas.requestPointerLock();
         }
     }
+
 
     return (
         <div id="canvas-container">
@@ -72,6 +74,7 @@ function App() {
                 <Lighters />
                 {/* <Effects /> */}
                 <GlobalCamera />
+                <axesHelper args={[50]}/>
 
                 <Suspense fallback={null}>
                     <Bvh firstHitOnly>

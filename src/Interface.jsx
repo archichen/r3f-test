@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCameraStore, ORBIT_CAMERA, PLAYER_CAMERA } from "./store/cameraStore";
+import { Button } from "@/components/ui/button";
 
 export default function Interface() {
     const setCurrentCamera = useCameraStore((state) => state.setCurrentCamera);
@@ -37,8 +38,8 @@ export default function Interface() {
                 gap: "10px",
             }}
         >
-            <button onClick={handleSwitchView}>Switch view</button>
-            <button onClick={handleSwitchFullScreen}>{ isFullScreen ? "Exit full screen" : "Enter full screen" }</button>
+            <Button onClick={handleSwitchView}>Switch view</Button>
+            <Button onClick={handleSwitchFullScreen}>{ isFullScreen ? "Exit full screen" : "Enter full screen" }</Button>
         </div>
     );
 }
