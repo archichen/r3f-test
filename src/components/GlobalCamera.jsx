@@ -80,7 +80,6 @@ export default function GlobalCamera() {
                 cameraStat.isAnimationDone = true;
 
                 console.log("相机到位");
-                console.log(to);
             }
             camera.lookAt(new THREE.Vector3(0, 0, 0));
         }

@@ -66,7 +66,6 @@ export function Model(props) {
   const handlePointerOverSeat = (seat) => {
     document.focusSeat = seat;
     document.isFocusOnSeat = true;
-    // console.log(document.focusSeat);
   };
 
   const handlePointerLeaveSeat = () => {

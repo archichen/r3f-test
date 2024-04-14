@@ -59,7 +59,6 @@ export default function Player() {
     useEffect(() => {
         const { x, y, z } = player.current.translation();
         setPlayerPosition([x, y, z]);
-        console.log([x, y, z]);
     }, [currentCamera]);
 
     return (
@@ -70,7 +69,7 @@ export default function Player() {
             {/* BUG: 在某些设备上，全屏状态切换时会导致 Player 碰撞异常然后掉下去 */}
             <Ecctrl
                 ref={player}
-                debug
+                // debug
                 animated
                 position={[-6, 10, -5.5]}
                 capsuleRadius={0.5}

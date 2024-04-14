@@ -8,6 +8,7 @@ import { Perf } from "r3f-perf";
 import { Model as Wall } from "./models/wall.glb";
 // import { Model as Seats } from "./components/seats.glb";
 // import { Model as Seats } from "./components/seats-conbined.glb";
+import { Model as Misc } from "./models/misc.glb";
 import { Model as Seats } from "./models/Seats";
 import { Suspense, useEffect, useRef } from "react";
 import { Physics, RigidBody } from "@react-three/rapier";
@@ -74,7 +75,7 @@ function App() {
 
                 <Suspense fallback={null}>
                     <Bvh firstHitOnly>
-                        <Physics timeStep={"vary"}>
+                        <Physics timeStep={"vary"} debug>
                             <Player />    
 
                             <Roof scale={5} />
@@ -92,6 +93,7 @@ function App() {
                             <Seats />
 
                             {/* TODO: 优化杂七杂八组件的碰撞和渲染，默认碰撞太吃性能 */}
+                            <Misc scale={5} />
                             {/* <RigidBody type="fixed" ccd scale={5}>
                                     <Misc />
                                 </RigidBody> */}
