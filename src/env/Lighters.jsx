@@ -4,7 +4,7 @@ import { DirectionalLightHelper, Vector3 } from "three";
 
 export default function Lighters() {
   const directLight = useRef();
-  useHelper(directLight, DirectionalLightHelper, 1, "red");
+  // useHelper(directLight, DirectionalLightHelper, 1, "red");
 
   // TODO: Fix shadow problems
   return (

@@ -22,6 +22,7 @@ import GlobalCamera from "./components/default/GlobalCamera";
 import Roof from "./models/Roof";
 import { PLAYER_CAMERA } from "./store/cameraStore";
 import { isEmpty } from "lodash";
+import './globals.css';
 
 document.canvas = null;
 document.camera = null;
@@ -70,7 +71,7 @@ function App() {
                 // }}
             >
                 <Sky />
-                <Perf position="top-left" />
+                <Perf position="bottom-right" />
                 <Lighters />
                 {/* <Effects /> */}
                 <GlobalCamera />
@@ -78,7 +79,7 @@ function App() {
 
                 <Suspense fallback={null}>
                     <Bvh firstHitOnly>
-                        <Physics timeStep={"vary"} debug>
+                        <Physics timeStep={"vary"}>
                             <Player />    
 
                             <Roof scale={5} />
