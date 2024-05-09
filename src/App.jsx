@@ -1,7 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import {
     Bvh,
-    Effects,
     Sky,
 } from "@react-three/drei";
 import { Perf } from "r3f-perf";
@@ -18,11 +17,12 @@ import Lighters from "./env/Lighters";
 import { isMobile } from "react-device-detect";
 import Interface from "./Interface";
 import Player from "./components/default/Player";
-import GlobalCamera from "./components/default/GlobalCamera";
+import GlobalCamera from "./components/default//GlobalCamera";
 import Roof from "./models/Roof";
 import { PLAYER_CAMERA } from "./store/cameraStore";
 import { isEmpty } from "lodash";
 import './globals.css';
+import Effects from "./env/Effects";
 
 document.canvas = null;
 document.camera = null;
@@ -59,11 +59,12 @@ function App() {
                 style={{ height: "100vh", width: "100vw" }}
                 performance={{ min: 0.1 }}
                 frameloop="always"
-                shadows
+                shadows='soft'
+                linear={true}
                 flat={true}
                 dpr={[1, 2]}
                 gl={{
-                    antialias: false,
+                    antialias: true,
                 }}
                 onClick={handleCanvasClick}
                 // camera={{
@@ -73,7 +74,7 @@ function App() {
                 <Sky />
                 <Perf position="bottom-right" />
                 <Lighters />
-                {/* <Effects /> */}
+                <Effects />
                 <GlobalCamera />
                 <axesHelper args={[50]}/>
 
@@ -82,7 +83,7 @@ function App() {
                         <Physics timeStep={"vary"}>
                             <Player />    
 
-                            <Roof scale={5} />
+                            {/* <Roof scale={5} /> */}
 
                             <RigidBody
                                 type="fixed"

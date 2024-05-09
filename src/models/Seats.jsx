@@ -15,13 +15,15 @@ import { Select } from "@react-three/postprocessing";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useSeatStore } from "../store/seatStore";
+import { Navigation } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function Model(props) {
     const { nodes } = useGLTF("/assets/seats.glb");
     const [selectedIndex, setSelectedIndex] = useState(-1);
 
-    const setCurrentSeat = useSeatStore((state) => state.setCurrentSeat)
-    const setSeats = useSeatStore((state) => state.setSeats)
+    const setCurrentSeat = useSeatStore((state) => state.setCurrentSeat);
+    const setSeats = useSeatStore((state) => state.setSeats);
 
     // TODO: 1. 加入高模支持
     // TODO: 2. 加入 Detail 组件，根据相机距离自动切换高低模
@@ -76,8 +78,7 @@ export function Model(props) {
     };
 
     const handlePointerLeaveSeat = () => {
-        if (!document.isFocusOnSeat) setCurrentSeat(null)
-        
+        if (!document.isFocusOnSeat) setCurrentSeat(null);
     };
 
     console.log(
@@ -106,7 +107,9 @@ export function Model(props) {
                                             onPointerLeave={() =>
                                                 handlePointerLeaveSeat()
                                             }
-                                            onClick={() => document.isFocusOnSeat = true}
+                                            onClick={() =>
+                                                (document.isFocusOnSeat = true)
+                                            }
                                         >
                                             <models.M1 />
                                             <models.M2 />
@@ -141,18 +144,21 @@ export function Model(props) {
 
 function HightLightBox(props) {
     const highLightBox = useRef();
-    
-    const currentSeat = useSeatStore((state) => state.currentSeat)
-    useFrame(({camera}, delta) => {
+
+    const currentSeat = useSeatStore((state) => state.currentSeat);
+    useFrame(({ camera }, delta) => {
         if (currentSeat) {
             highLightBox.current.visible = true;
-            highLightBox.current.position.lerp(currentSeat.position, delta * 20);
+            highLightBox.current.position.lerp(
+                currentSeat.position,
+                delta * 20
+            );
         } else {
             highLightBox.current.visible = false;
         }
     });
 
-    const handlePinTips = () => {}
+    const handlePinTips = () => {};
     return (
         <group ref={highLightBox}>
             <mesh scale={0.4} onClick={handlePinTips}>
@@ -165,19 +171,48 @@ function HightLightBox(props) {
                     color={"orange"}
                 />
             </mesh>
-            <Html>
-                {
-                  currentSeat &&
-                  <div
-                  className="
-              bg-white
-              rounded-lg
-              p-2
-             "
-              >
-                {currentSeat.name}
-              </div>
-                }
+            <Html
+                className="w-80 h-36"
+            >
+                {currentSeat && (
+                    <div className="bg-white rounded-lg drop-shadow-lg">
+                        <div className="font-bold text-xs bg-blue-900 text-white text-center pt-1 pb-1">
+                            Seat no: {currentSeat.name}
+                        </div>
+                        <div
+                            className="
+                                flex items-center justify-center
+                                p-2
+                            "
+                        >
+                            <img
+                                className="w-24 h-24 rounded-full bg-cover bg-center"
+                                src="https://p9-pc-sign.douyinpic.com/tos-cn-i-0813/okPDfA2A9IkAtDobDAEAVgnlAlteDAa6CgArqD~noop.jpeg?biz_tag=pcweb_cover&from=327834062&s=PackSourceEnum_SEARCH&se=false&x-expires=1715738400&x-signature=lfihm76eEhJ0%2BPq1nwE2PbqZGvU%3D"
+                            />
+
+                            <div className="ml-2 flex flex-col ">
+                                <p className="font-bold w-32 truncate">
+                                    PENG, YU YAN
+                                </p>
+                                <p className="text-xs pb-1 font-light w-32 truncate">
+                                    Email: test@pyy.com
+                                </p>
+                                <p className="text-xs pb-1 font-light w-32 truncate">
+                                    Title: Super star
+                                </p>
+                                <p className="text-xs font-light w-32 truncate">
+                                    Location: Build 5, Lujiazui XXX Park
+                                </p>
+                            </div>
+                            <Button
+                                radius="full"
+                                className="rounded-full w-14 h-14"
+                            >
+                                <Navigation />
+                            </Button>
+                        </div>
+                    </div>
+                )}
             </Html>
         </group>
     );
