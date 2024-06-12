@@ -17,6 +17,7 @@ import { Vector3 } from "three";
 import { useSeatStore } from "../store/seatStore";
 import { Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavStore } from "../store/navStore";
 
 export function Model(props) {
     const { nodes } = useGLTF("/assets/seats.glb");
@@ -157,6 +158,16 @@ function HightLightBox(props) {
             highLightBox.current.visible = false;
         }
     });
+
+    const setTargetPosition = useNavStore(state => state.setTargetPosition);
+
+    // TODO: 通过seat获得的桌子的位置实际上不在navmesh上，那么这个位置就不能通过寻路得到，有什么办法解决？
+    useEffect(() => {
+        if (!currentSeat) return;
+        const {x, z} = currentSeat.position;
+        setTargetPosition(new Vector3(-6, -2.5, -5.5))
+        console.log(currentSeat)
+    }, [currentSeat]);
 
     const handlePinTips = () => {};
     return (

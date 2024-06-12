@@ -29,6 +29,7 @@ import {
 import { useSeatStore } from "./store/seatStore";
 import { CommandList } from "cmdk";
 import { useControls } from "leva";
+import { useFullscreen } from "ahooks";
 
 export default function Interface() {
     const setCurrentCamera = useCameraStore((state) => state.setCurrentCamera);
@@ -56,39 +57,7 @@ export default function Interface() {
         }
     };
 
-    const [isFullScreen, setIsFullScreen] = useState(false);
-    const handleSwitchFullScreen = () => {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-            setIsFullScreen(false);
-        } else {
-            document.documentElement.requestFullscreen();
-            setIsFullScreen(true);
-        }
-    };
-
-    const frameworks = [
-        {
-            value: "next.js",
-            label: "Next.js",
-        },
-        {
-            value: "sveltekit",
-            label: "SvelteKit",
-        },
-        {
-            value: "nuxt.js",
-            label: "Nuxt.js",
-        },
-        {
-            value: "remix",
-            label: "Remix",
-        },
-        {
-            value: "astro",
-            label: "Astro",
-        },
-    ];
+    const [, { toggleFullscreen  }] = useFullscreen(() => document.body);
 
     const [open, setOpen] = React.useState(false);
 
@@ -156,8 +125,8 @@ export default function Interface() {
                 }}
             >
                 <Button onClick={handleSwitchView}>Switch view</Button>
-                <Button onClick={handleSwitchFullScreen}>
-                    {isFullScreen ? "Exit full screen" : "Enter full screen"}
+                <Button onClick={toggleFullscreen}>
+                    Toggle full screen
                 </Button>
             </div>
         </>

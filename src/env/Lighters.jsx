@@ -23,8 +23,6 @@ export default function Lighters() {
         light3_pos: [-70, 55, -40],
     });
 
-    console.log(light1_pos);
-
     // TODO: Fix shadow problems
     return (
         <>

@@ -49,10 +49,6 @@ export default function Misc(props) {
 
     }, [materials]);
 
-    useEffect(() => {
-        console.log(nodes.door_left)
-    })
-
     useFrame((_, delta) => {
         door_animation(nodes, delta);
     });

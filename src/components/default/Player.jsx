@@ -7,6 +7,9 @@ import {
     PLAYER_CAMERA,
     useCameraStore,
 } from "../../store/cameraStore";
+import {useNavStore} from "../../store/navStore";
+import { useRafInterval } from "ahooks";
+import { Vector3 } from "three";
 
 export default function Player() {
     const keyboardMap = [
@@ -61,12 +64,21 @@ export default function Player() {
         setPlayerPosition([x, y, z]);
     }, [currentCamera]);
 
+
+    // TODO: optimize code and logic
+    const setStartPosition = useNavStore(state => state.setStartPosition);
+
+    useRafInterval(() => {
+        const { x, z } = player.current.translation();
+        setStartPosition(new Vector3(x, -2.5, z));
+    }, 1000);
+
     return (
         <KeyboardControls
             map={currentCamera === PLAYER_CAMERA ? keyboardMap : []}
         >
             {/* TODO: 调整Ecctrl 组件参数，解决 Player 漂浮问题 */}
-            {/* BUG: 在某些设备上，全屏状态切换时会导致 Player 碰撞异常然后掉下去 */}
+            {/* BUG: 在某些设备上，全屏状态切换时会导致 Player 碰撞异常然后掉下去。该问题和帧率有关。 */}
             <Ecctrl
                 ref={player}
                 // debug
