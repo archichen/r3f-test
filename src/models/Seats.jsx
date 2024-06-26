@@ -165,7 +165,8 @@ function HightLightBox(props) {
     useEffect(() => {
         if (!currentSeat) return;
         const {x, z} = currentSeat.position;
-        setTargetPosition(new Vector3(-6, -2.5, -5.5))
+        // setTargetPosition(new Vector3(-6, -2.5, -5.5))
+        setTargetPosition(new Vector3(x * 5, -2.5, z * 5));
         console.log(currentSeat)
     }, [currentSeat]);
 

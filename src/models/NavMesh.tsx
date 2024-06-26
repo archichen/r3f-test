@@ -18,7 +18,7 @@ export default function NavMesh(props) {
     } = useGLTF("/assets/navmesh.glb");
 
     const { opacity } = useControls("NavMesh", {
-        opacity: 0,
+        opacity: 1,
     });
 
     const ZONE = "level1";
@@ -74,14 +74,19 @@ export default function NavMesh(props) {
             phelper.setNodePosition(closestTargetNode.centroid);
 
         let groupID = pathfinding.getGroup(ZONE, startPosition);
+
+        const point = pathfinding.getClosestNode(targetPosition, ZONE, groupID)
+        console.log("closestNode: ", point);
+
         let p = pathfinding.findPath(
             startPosition,
-            targetPosition,
+            point.centroid,
             ZONE,
             groupID
         );
         if (p && p.length) {
             phelper.setPath(p);
+            console.log("validate path: ", p)
         } else {
             const closestPlayerNode = pathfinding.getClosestNode(
                 startPosition,
@@ -100,22 +105,32 @@ export default function NavMesh(props) {
                 clamped
             );
 
+            console.log("validate clampStep: ", clamped)
+
             phelper.setStepPosition(clamped);
+
+
         }
     }, [startPosition, targetPosition]);
+
+    const handleClick = (e) => {
+        console.log("Clicked point: ", e.point)
+    }
 
     return (
         <group {...props}>
             <mesh
                 geometry={navmesh.geometry}
+                onClick={handleClick}
                 material={
                     new THREE.MeshBasicMaterial({
-                        color: "red",
+                        color: "white",
                         opacity: opacity,
                         transparent: true,
                     })
                 }
             ></mesh>
+            <boxGeometry args={[10, 10]}  />
         </group>
     );
 }
