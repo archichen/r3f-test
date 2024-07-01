@@ -107,7 +107,7 @@ function App() {
                                 </RigidBody> */}
 
                             <NavMesh
-                                scale={navmesh_scale}
+                                nav_mesh_scale={navmesh_scale}
                                 position={navmesh_position}
                             />
                         </Physics>

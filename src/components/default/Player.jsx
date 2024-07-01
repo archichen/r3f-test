@@ -10,6 +10,7 @@ import {
 import {useNavStore} from "../../store/navStore";
 import { useRafInterval } from "ahooks";
 import { Vector3 } from "three";
+import { keys } from "lodash";
 
 export default function Player() {
     const keyboardMap = [
@@ -24,6 +25,10 @@ export default function Player() {
         { name: "action3", keys: ["3"] },
         { name: "action4", keys: ["KeyF"] },
     ];
+
+    const functionKeyMap = [
+        { name: "function1", keys: ["KeyC"] }
+    ]
 
     /**
      * Character url preset
@@ -68,14 +73,21 @@ export default function Player() {
     // TODO: optimize code and logic
     const setStartPosition = useNavStore(state => state.setStartPosition);
 
-    useRafInterval(() => {
+    const handleKeyChange = (action) => {
         const { x, z } = player.current.translation();
-        setStartPosition(new Vector3(x, -2.5, z));
-    }, 1000);
+        switch (action) {
+            case "function1":
+                setStartPosition(new Vector3(x, -2.5, z));
+                break;
+            default:
+                break;
+        }
+    }
 
     return (
         <KeyboardControls
-            map={currentCamera === PLAYER_CAMERA ? keyboardMap : []}
+            onChange={handleKeyChange}
+            map={currentCamera === PLAYER_CAMERA ? [...keyboardMap, ...functionKeyMap] : functionKeyMap}
         >
             {/* TODO: 调整Ecctrl 组件参数，解决 Player 漂浮问题 */}
             {/* BUG: 在某些设备上，全屏状态切换时会导致 Player 碰撞异常然后掉下去。该问题和帧率有关。 */}
